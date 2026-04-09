@@ -4,6 +4,8 @@ import compression from 'compression';
 import helmet from 'helmet';
 import v1Routes from "./api/v1/index";
 import { errorMiddleware } from "./middlewares/error.middleware";
+import peliculasRoutes from "./modules/peliculas/peliculas.routes";
+
 
 
 export const app = express();
@@ -13,6 +15,7 @@ app.use(cors());
 app.use(compression());
 app.use(express.json());
 
+app.use("/api/peliculas", peliculasRoutes);
 app.use('/api/v1', v1Routes);
 
 app.use(errorMiddleware);
