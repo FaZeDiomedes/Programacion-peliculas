@@ -1,6 +1,5 @@
 import swaggerJsdoc from "swagger-jsdoc";
 
-console.log("SERVER_URL:", process.env.SERVER_URL);
 
 export const openApiSpec = swaggerJsdoc({
   definition: {
@@ -18,7 +17,7 @@ export const openApiSpec = swaggerJsdoc({
         description: "Servidor Local",
       },
       {
-        url: process.env.SERVER_URL || "https://programacion-peliculas.onrender.com/api/v1/docs/",
+        url: "https://programacion-peliculas.onrender.com/api/v1/docs/",
         description: "Servidor Render",
       },
     ],
