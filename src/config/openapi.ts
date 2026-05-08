@@ -12,8 +12,8 @@ export const openApiSpec = swaggerJsdoc({
 
     servers: [
       {
-        url: "http://localhost:3000",
-        description: "Servidor local",
+        url: process.env.SERVER_URL || "http://localhost:3000",
+        description: "Servidor",
       },
     ],
 
@@ -34,5 +34,9 @@ export const openApiSpec = swaggerJsdoc({
     ],
   },
 
-  apis: ["./src/modules/**/*.routes.ts"],
+  apis: [
+    process.env.NODE_ENV === "production"
+      ? "dist/modules/**/*.routes.js"
+      : "src/modules/**/*.routes.ts",
+  ],
 });
