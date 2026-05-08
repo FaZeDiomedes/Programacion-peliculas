@@ -1,5 +1,7 @@
 import swaggerJsdoc from "swagger-jsdoc";
 
+console.log("SERVER_URL:", process.env.SERVER_URL);
+
 export const openApiSpec = swaggerJsdoc({
   definition: {
     openapi: "3.0.0",
