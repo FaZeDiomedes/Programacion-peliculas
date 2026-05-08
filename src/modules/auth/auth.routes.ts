@@ -17,7 +17,7 @@ const _AuthController = new AuthController();
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/RegisterInput'
+ *             ref: '#/components/schemas/RegisterInput'
  *           example:
  *             name: "Juan Perez"
  *             email: "juan@gmail.com"
@@ -28,7 +28,7 @@ const _AuthController = new AuthController();
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/AuthResponse'
+ *                ref: '#/components/schemas/AuthResponse'
  *       400:
  *         description: El usuario ya existe
  */

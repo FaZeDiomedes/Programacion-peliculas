@@ -14,8 +14,12 @@ export const openApiSpec = swaggerJsdoc({
 
     servers: [
       {
-        url: process.env.SERVER_URL || "http://localhost:3000",
-        description: "Servidor",
+        url: "http://localhost:3000",
+        description: "Servidor Local",
+      },
+      {
+        url: process.env.SERVER_URL || "https://programacion-peliculas.onrender.com/api/v1/docs/",
+        description: "Servidor Render",
       },
     ],
 
