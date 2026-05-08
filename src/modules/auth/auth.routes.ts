@@ -8,13 +8,6 @@ const _AuthController = new AuthController();
 
 /**
  * @openapi
- * tags:
- *   name: Auth
- *   description: Autenticación de usuarios
- */
-
-/**
- * @openapi
  * /api/v1/auth/register:
  *   post:
  *     summary: Registrar usuario
@@ -25,6 +18,10 @@ const _AuthController = new AuthController();
  *         application/json:
  *           schema:
  *             $ref: '#/components/schemas/RegisterInput'
+ *           example:
+ *             name: "Juan Perez"
+ *             email: "juan@gmail.com"
+ *             password: "123456"
  *     responses:
  *       201:
  *         description: Usuario registrado correctamente
@@ -48,14 +45,14 @@ router.post('/register',_AuthController.register);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/LoginInput'
+ *             ref: '#/components/schemas/LoginInput'
  *     responses:
  *       200:
  *         description: Login exitoso
  *         content:
  *           application/json:
  *             schema:
- *               $ref: '#/components/schemas/AuthResponse'
+ *               ref: '#/components/schemas/AuthResponse'
  *       401:
  *         description: Credenciales inválidas
  */

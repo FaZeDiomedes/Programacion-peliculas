@@ -1,21 +1,38 @@
 import swaggerJsdoc from "swagger-jsdoc";
-import path from "path"
 
-export const openApiSpec = swaggerJsdoc ({
+export const openApiSpec = swaggerJsdoc({
   definition: {
     openapi: "3.0.0",
+
     info: {
       title: "Api Peliculas",
       version: "1.0.0",
       description: "Api de peliculas",
     },
-  },
-  servers: [
-    {
-      url: "http://localhost:3000/api/v1",
-      description: "Api de peliculas",
+
+    servers: [
+      {
+        url: "http://localhost:3000",
+        description: "Servidor local",
+      },
+    ],
+
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
     },
-  ],
-  //apis: ["./src/modules/**/*.routes.ts"],
+
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
+  },
+
   apis: ["./src/modules/**/*.routes.ts"],
-})
+});

@@ -23,11 +23,11 @@ app.get('/saludar', (_req, res) => {
     res.json({"Saludar": "Hola"})
 })
 
-app.use("/docs", swaggerUi.serve, swaggerUi.setup(openApiSpec));
+app.use("/api/v1/docs", swaggerUi.serve, swaggerUi.setup(openApiSpec));
 
-app.use("/api/peliculas", peliculasRoutes);
+app.use("/api/v1/peliculas", peliculasRoutes);
 app.use("/api/v1", v1Routes);
-app.use("/watch-later", watchLaterRoutes);
-app.use("/reviews", reviewsRoutes);
+app.use("/api/v1/watch-later", watchLaterRoutes);
+app.use("/api/v1/reviews", reviewsRoutes);
 
 app.use(errorMiddleware);
