@@ -1,5 +1,14 @@
 import { Router } from "express";
-import { create, listByMovie } from "./reviews.controller";
+
+
+import {
+  create,
+  list,
+  listByMovie,
+  findById,
+  update,
+  remove,
+} from "./reviews.controller";
 
 const router = Router();
 
@@ -23,13 +32,13 @@ const router = Router();
  *             properties:
  *               userId:
  *                 type: string
- *                 example: "user123"
+ *                 example: "665f1c2e8a1234567890abcd"
  *               movieId:
  *                 type: string
- *                 example: "movie456"
+ *                 example: "665f1c2e8a1234567890efgh"
  *               comment:
  *                 type: string
- *                 example: "Muy buena película"
+ *                 example: "Excelente película"
  *               rating:
  *                 type: number
  *                 example: 5
@@ -43,7 +52,7 @@ const router = Router();
  *               properties:
  *                 id:
  *                   type: string
- *                   example: "661f123abc123"
+ *                   example: "665f1c2e8a1234567890ijkl"
  *                 userId:
  *                   type: string
  *                 movieId:
@@ -56,25 +65,18 @@ const router = Router();
  *                   type: string
  *                   format: date-time
  *       400:
- *         description: Datos inválidos (faltantes o rating fuera de rango)
+ *         description: Datos inválidos
  *       500:
- *         description: Error del servidor
+ *         description: Error servidor
  */
 router.post("/", create);
 
 /**
  * @openapi
- * /api/v1/reviews/{movieId}:
+ * /api/v1/reviews:
  *   get:
- *     summary: Obtener reseñas por película
+ *     summary: Obtener todas las reseñas
  *     tags: [Reviews]
- *     parameters:
- *       - in: path
- *         name: movieId
- *         required: true
- *         schema:
- *           type: string
- *         description: ID de la película
  *     responses:
  *       200:
  *         description: Lista de reseñas
@@ -87,7 +89,7 @@ router.post("/", create);
  *                 properties:
  *                   _id:
  *                     type: string
- *                     example: "661f123abc123"
+ *                     example: "665f1c2e8a1234567890ijkl"
  *                   userId:
  *                     type: string
  *                   movieId:
@@ -100,8 +102,163 @@ router.post("/", create);
  *                     type: string
  *                     format: date-time
  *       500:
- *         description: Error del servidor
+ *         description: Error servidor
  */
-router.get("/:movieId", listByMovie);
+router.get("/", list);
+
+/**
+ * @openapi
+ * /api/v1/reviews/movie/{movieId}:
+ *   get:
+ *     summary: Obtener reseñas por película
+ *     tags: [Reviews]
+ *     parameters:
+ *       - in: path
+ *         name: movieId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         example: "665f1c2e8a1234567890efgh"
+ *     responses:
+ *       200:
+ *         description: Lista de reseñas de la película
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                     example: "665f1c2e8a1234567890ijkl"
+ *                   userId:
+ *                     type: string
+ *                   movieId:
+ *                     type: string
+ *                   comment:
+ *                     type: string
+ *                     example: "Muy entretenida"
+ *                   rating:
+ *                     type: number
+ *                     example: 4
+ *                   createdAt:
+ *                     type: string
+ *                     format: date-time
+ *       404:
+ *         description: No se encontraron reseñas
+ *       500:
+ *         description: Error servidor
+ */
+router.get("/movie/:movieId", listByMovie);
+
+/**
+ * @openapi
+ * /api/v1/reviews/{id}:
+ *   get:
+ *     summary: Obtener reseña por ID
+ *     tags: [Reviews]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         example: "665f1c2e8a1234567890ijkl"
+ *     responses:
+ *       200:
+ *         description: Reseña encontrada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                   example: "665f1c2e8a1234567890ijkl"
+ *                 userId:
+ *                   type: string
+ *                 movieId:
+ *                   type: string
+ *                 comment:
+ *                   type: string
+ *                 rating:
+ *                   type: number
+ *                 createdAt:
+ *                   type: string
+ *                   format: date-time
+ *       404:
+ *         description: Reseña no encontrada
+ *       500:
+ *         description: Error servidor
+ */
+router.get("/:id", findById);
+
+/**
+ * @openapi
+ * /api/v1/reviews/{id}:
+ *   put:
+ *     summary: Actualizar reseña
+ *     tags: [Reviews]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         example: "665f1c2e8a1234567890ijkl"
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               comment:
+ *                 type: string
+ *                 example: "Ahora me gustó más la película"
+ *               rating:
+ *                 type: number
+ *                 example: 5
+ *     responses:
+ *       200:
+ *         description: Reseña actualizada correctamente
+ *       404:
+ *         description: Reseña no encontrada
+ *       500:
+ *         description: Error servidor
+ */
+router.put("/:id", update);
+
+/**
+ * @openapi
+ * /api/v1/reviews/{id}:
+ *   delete:
+ *     summary: Eliminar reseña
+ *     tags: [Reviews]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         example: "665f1c2e8a1234567890ijkl"
+ *     responses:
+ *       200:
+ *         description: Reseña eliminada correctamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "Reseña eliminada"
+ *       404:
+ *         description: Reseña no encontrada
+ *       500:
+ *         description: Error servidor
+ */
+router.delete("/:id", remove);
 
 export default router;

@@ -1,5 +1,13 @@
 import { Router } from "express";
-import { add, list, remove } from "./watchLater.controller";
+
+import {
+  add,
+  list,
+  listByUser,
+  findById,
+  update,
+  remove,
+} from "./watchLater.controller";
 
 const router = Router();
 
@@ -7,7 +15,7 @@ const router = Router();
  * @openapi
  * /api/v1/watch-later:
  *   post:
- *     summary: Agregar película a "ver más tarde"
+ *     summary: Agregar película a ver más tarde
  *     tags: [WatchLater]
  *     requestBody:
  *       required: true
@@ -21,10 +29,10 @@ const router = Router();
  *             properties:
  *               userId:
  *                 type: string
- *                 example: "user123"
+ *                 example: "665f1c2e8a1234567890abcd"
  *               movieId:
  *                 type: string
- *                 example: "movie456"
+ *                 example: "665f1c2e8a1234567890efgh"
  *     responses:
  *       201:
  *         description: Película agregada correctamente
@@ -35,7 +43,7 @@ const router = Router();
  *               properties:
  *                 id:
  *                   type: string
- *                   example: "661f123abc123"
+ *                   example: "665f1c2e8a1234567890ijkl"
  *                 userId:
  *                   type: string
  *                 movieId:
@@ -46,15 +54,48 @@ const router = Router();
  *       400:
  *         description: Faltan datos
  *       500:
- *         description: Error del servidor
+ *         description: Error servidor
  */
 router.post("/", add);
 
 /**
  * @openapi
- * /api/v1/watch-later/{userId}:
+ * /api/v1/watch-later:
  *   get:
- *     summary: Obtener lista "ver más tarde" de un usuario
+ *     summary: Obtener todos los registros
+ *     tags: [WatchLater]
+ *     responses:
+ *       200:
+ *         description: Lista de registros
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                     example: "665f1c2e8a1234567890ijkl"
+ *                   userId:
+ *                     type: string
+ *                     example: "665f1c2e8a1234567890abcd"
+ *                   movieId:
+ *                     type: string
+ *                     example: "665f1c2e8a1234567890efgh"
+ *                   createdAt:
+ *                     type: string
+ *                     format: date-time
+ *       500:
+ *         description: Error servidor
+ */
+router.get("/", list);
+
+/**
+ * @openapi
+ * /api/v1/watch-later/user/{userId}:
+ *   get:
+ *     summary: Obtener lista por usuario
  *     tags: [WatchLater]
  *     parameters:
  *       - in: path
@@ -62,7 +103,7 @@ router.post("/", add);
  *         required: true
  *         schema:
  *           type: string
- *         description: ID del usuario
+ *         example: "665f1c2e8a1234567890abcd"
  *     responses:
  *       200:
  *         description: Lista de películas guardadas
@@ -75,7 +116,7 @@ router.post("/", add);
  *                 properties:
  *                   _id:
  *                     type: string
- *                     example: "661f123abc123"
+ *                     example: "665f1c2e8a1234567890ijkl"
  *                   userId:
  *                     type: string
  *                   movieId:
@@ -83,36 +124,106 @@ router.post("/", add);
  *                   createdAt:
  *                     type: string
  *                     format: date-time
+ *       404:
+ *         description: Usuario no encontrado
  *       500:
- *         description: Error del servidor
+ *         description: Error servidor
  */
-router.get("/:userId", list);
+router.get(
+  "/user/:userId",
+  listByUser
+);
 
 /**
  * @openapi
- * /api/v1/watch-later:
- *   delete:
- *     summary: Eliminar película de "ver más tarde"
+ * /api/v1/watch-later/{id}:
+ *   get:
+ *     summary: Obtener elemento por ID
  *     tags: [WatchLater]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         example: "665f1c2e8a1234567890ijkl"
+ *     responses:
+ *       200:
+ *         description: Registro encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 _id:
+ *                   type: string
+ *                   example: "665f1c2e8a1234567890ijkl"
+ *                 userId:
+ *                   type: string
+ *                 movieId:
+ *                   type: string
+ *                 createdAt:
+ *                   type: string
+ *                   format: date-time
+ *       404:
+ *         description: Registro no encontrado
+ *       500:
+ *         description: Error servidor
+ */
+router.get("/:id", findById);
+
+/**
+ * @openapi
+ * /api/v1/watch-later/{id}:
+ *   put:
+ *     summary: Actualizar elemento
+ *     tags: [WatchLater]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         example: "665f1c2e8a1234567890ijkl"
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
- *             required:
- *               - userId
- *               - movieId
  *             properties:
  *               userId:
  *                 type: string
- *                 example: "user123"
+ *                 example: "665f1c2e8a1234567890abcd"
  *               movieId:
  *                 type: string
- *                 example: "movie456"
+ *                 example: "665f1c2e8a1234567890zzzz"
  *     responses:
  *       200:
- *         description: Eliminado correctamente
+ *         description: Registro actualizado correctamente
+ *       404:
+ *         description: Registro no encontrado
+ *       500:
+ *         description: Error servidor
+ */
+router.put("/:id", update);
+
+/**
+ * @openapi
+ * /api/v1/watch-later/{id}:
+ *   delete:
+ *     summary: Eliminar elemento
+ *     tags: [WatchLater]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         example: "665f1c2e8a1234567890ijkl"
+ *     responses:
+ *       200:
+ *         description: Registro eliminado correctamente
  *         content:
  *           application/json:
  *             schema:
@@ -122,10 +233,10 @@ router.get("/:userId", list);
  *                   type: string
  *                   example: "Eliminado correctamente"
  *       404:
- *         description: No encontrado
+ *         description: Registro no encontrado
  *       500:
- *         description: Error del servidor
+ *         description: Error servidor
  */
-router.delete("/", remove);
+router.delete("/:id", remove);
 
 export default router;
