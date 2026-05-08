@@ -28,6 +28,6 @@ app.use("/api/v1/docs", swaggerUi.serve, swaggerUi.setup(openApiSpec));
 app.use("/api/v1/peliculas", peliculasRoutes);
 app.use("/api/v1", v1Routes);
 app.use("/api/v1/watch-later", watchLaterRoutes);
-app.use("/reviews", reviewsRoutes);
+app.use("/api/v1/reviews", reviewsRoutes);
 
 app.use(errorMiddleware);
