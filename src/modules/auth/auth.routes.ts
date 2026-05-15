@@ -164,7 +164,7 @@ router.get(
 
 /**
  * @openapi
- * api/v1/auth/{id}:
+ * /api/v1/auth/{id}:
  *   get:
  *     summary: Obtener usuario por ID
  *     tags: [Auth]
